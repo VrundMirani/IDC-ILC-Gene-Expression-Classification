@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Local datasets
+*.csv
+*.xlsx
+*.xls
+
+# Model artifacts
+*.model
+*.pkl
+*.pickle
+*.joblib
+*.h5
+*.hdf5
+*.pt
+*.pth
+
+# Environments
+.venv/
+venv/
+env/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Logs / IDE
+*.log
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Original local output folders
+output/
+shap_results/
+
+# Publish selected research CSV outputs
+!results/
+!results/**/*.csv
