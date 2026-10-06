@@ -1,455 +1,226 @@
 # 🧬 IDC vs ILC Classification Using Gene Expression Data
 
+### Comparative Machine Learning and Explainable AI Analysis of Infiltrating Ductal Carcinoma and Infiltrating Lobular Carcinoma
+
 <p align="center">
+  <a href="https://www.python.org/">
+    <img src="https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white" alt="Python">
+  </a>
+  <a href="https://scikit-learn.org/">
+    <img src="https://img.shields.io/badge/scikit--learn-Machine%20Learning-F7931E?logo=scikit-learn&logoColor=white" alt="Scikit-learn">
+  </a>
+  <a href="https://xgboost.readthedocs.io/">
+    <img src="https://img.shields.io/badge/XGBoost-Modeling-1A1A1A" alt="XGBoost">
+  </a>
+  <a href="https://shap.readthedocs.io/">
+    <img src="https://img.shields.io/badge/SHAP-Explainable%20AI-8A2BE2" alt="SHAP">
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-2EA44F" alt="License">
+  </a>
+</p>
 
-**A Comparative Machine Learning Study for Molecular Classification of Infiltrating Ductal Carcinoma and Infiltrating Lobular Carcinoma**
-
-<br>
-
-[![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)](https://www.python.org/)
-[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-Machine%20Learning-orange?logo=scikit-learn)](https://scikit-learn.org/)
-[![XGBoost](https://img.shields.io/badge/XGBoost-Gradient%20Boosting-red)](https://xgboost.readthedocs.io/)
-[![SHAP](https://img.shields.io/badge/SHAP-Model%20Interpretability-purple)](https://shap.readthedocs.io/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-
+<p align="center">
+  <strong>AI Healthcare Research · Computational Oncology · Machine Learning · Explainable AI</strong>
 </p>
 
 ---
 
-## 🔬 Abstract
+## 🔬 Research Overview
 
-Breast cancer comprises biologically and clinically heterogeneous disease subtypes with distinct molecular characteristics. Among these, **Infiltrating Ductal Carcinoma (IDC)** and **Infiltrating Lobular Carcinoma (ILC)** represent two major histological forms of invasive breast cancer.
+Breast cancer is molecularly heterogeneous, and **Infiltrating Ductal Carcinoma (IDC)** and **Infiltrating Lobular Carcinoma (ILC)** exhibit distinct biological characteristics.
 
-This research investigates whether machine learning models can distinguish IDC from ILC using high-dimensional molecular and gene-expression features.
+This study investigates whether **high-dimensional gene-expression and molecular features** can be used to distinguish IDC from ILC through machine learning.
 
-The study presents a comparative evaluation of **Logistic Regression, Random Forest, and XGBoost**, with particular emphasis on predictive performance, feature-selection effects, cross-validation reliability, statistical comparison, and model interpretability.
+Three complementary models are evaluated:
 
-Beyond predictive classification, the workflow incorporates **SHAP-based explainability, permutation importance, model-derived feature importance, and consensus feature ranking** to investigate molecular features associated with model predictions.
+**Logistic Regression · Random Forest · XGBoost**
 
-The overall objective is not simply to maximize classification accuracy, but to develop a **reproducible and interpretable computational framework** for studying molecular patterns that may contribute to the distinction between IDC and ILC.
+The study goes beyond predictive performance by combining **cross-validation, statistical testing, feature-selection analysis, SHAP explainability, permutation importance, and consensus feature ranking**.
 
-> **Research status:** Experimental research repository. The methodology, results, and biological interpretation may be further refined as the research progresses toward manuscript submission.
-
----
-
-# 1. 🎯 Research Question
-
-The central research question is:
-
-> **Can machine learning models reliably distinguish Infiltrating Ductal Carcinoma (IDC) from Infiltrating Lobular Carcinoma (ILC) using high-dimensional gene-expression and molecular features, and which features contribute most strongly to these predictions?**
-
-The study additionally investigates:
-
-* How do Logistic Regression, Random Forest, and XGBoost compare?
-* How does feature selection affect predictive performance?
-* How stable are model performances under stratified cross-validation?
-* Are observed differences between models statistically meaningful?
-* Which molecular features consistently emerge as important across different interpretation methods?
-* What direction of contribution do important features make to XGBoost predictions?
+> **Research objective:** Develop a reproducible and interpretable computational framework for studying molecular patterns associated with IDC vs ILC classification.
 
 ---
 
-# 2. 🧬 IDC vs ILC
+## 🎯 Research Question
 
-Breast cancer is a heterogeneous disease consisting of multiple histological and molecular subtypes.
+> **Can machine learning reliably distinguish IDC from ILC using high-dimensional molecular features, and which features contribute most strongly to the predictions?**
 
-### Infiltrating Ductal Carcinoma — IDC
+The study evaluates four closely related questions:
 
-IDC originates in the milk ducts and is the most common form of invasive breast carcinoma.
-
-### Infiltrating Lobular Carcinoma — ILC
-
-ILC originates in the milk-producing lobules of the breast and has distinct morphological and molecular characteristics compared with IDC.
-
-Although histopathological examination remains fundamental for diagnosis and classification, molecular data provide an opportunity to investigate patterns that may distinguish these disease entities computationally.
-
-This research therefore frames IDC vs ILC classification as a **binary supervised learning problem** using molecular features.
+* Which model provides the strongest predictive performance?
+* How does feature selection affect classification?
+* How stable are model performances across validation folds?
+* Which molecular features consistently emerge as important across interpretation methods?
 
 ---
 
-# 3. 🧪 Dataset Description
+## 🧬 IDC vs ILC
 
-The analysis uses breast cancer molecular and clinical data containing a large number of molecular variables alongside clinical and pathological attributes.
+**IDC** originates primarily from the breast ducts, while **ILC** originates from the lobular tissue of the breast.
 
-The primary target variable used for the classification task is:
+Their biological and morphological differences make IDC vs ILC classification an important computational research problem for investigating whether molecular data contain discriminative patterns.
+
+In this study, IDC vs ILC is formulated as a **binary supervised-learning problem** with:
+
+```text
+Target: histological.type
+
+IDC  ↔  ILC
+```
+
+---
+
+## 🧪 Dataset
+
+The study uses a **high-dimensional breast cancer molecular dataset** containing gene-expression and related molecular/clinical variables.
+
+The target variable is:
 
 ```text
 histological.type
 ```
 
-The research dataset is high-dimensional, containing substantially more molecular variables than observations. This creates a challenging **high-dimensional, low-sample-size learning setting**, where preprocessing, feature selection, regularization, validation strategy, and leakage prevention are particularly important.
+The feature space is substantially larger than the number of available observations, creating a **high-dimensional, low-sample-size setting** that requires careful preprocessing, feature selection, regularization, and validation.
 
-The dataset includes molecular measurements alongside variables representing clinical or pathological characteristics.
+🔒 **Raw datasets are intentionally excluded from this repository.**
 
-### Target
-
-The classification task focuses on:
-
-```text
-IDC
-vs
-ILC
-```
-
-The original datasets are **not included in this public repository**.
-
-See [`data/README.md`](data/README.md) for information regarding data availability and responsible data use.
+See [`data/README.md`](data/README.md) for data-availability information.
 
 ---
 
-# 4. ⚙️ Methodology
-
-The computational workflow is organized into a sequential research pipeline:
+# ⚙️ Methodological Framework
 
 ```text
-                    ┌─────────────────────┐
-                    │   Molecular Data    │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │ Data Verification & │
-                    │   Quality Control    │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │ Exploratory Data    │
-                    │      Analysis       │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │ Stratified Data     │
-                    │      Splitting      │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │ Leakage-Safe        │
-                    │ Preprocessing       │
-                    └──────────┬──────────┘
-                               │
-                  ┌────────────┴────────────┐
-                  │                         │
-                  ▼                         ▼
-          ┌──────────────┐         ┌────────────────┐
-          │ All Features │         │ Feature Select.│
-          └──────┬───────┘         └───────┬────────┘
-                 │                         │
-                 └────────────┬────────────┘
-                              ▼
-                 ┌────────────────────────┐
-                 │ Logistic Regression    │
-                 │ Random Forest           │
-                 │ XGBoost                 │
-                 └────────────┬───────────┘
-                              │
-                              ▼
-                 ┌────────────────────────┐
-                 │ Cross-Validation &     │
-                 │ Hyperparameter Search  │
-                 └────────────┬───────────┘
-                              │
-                              ▼
-                 ┌────────────────────────┐
-                 │ Performance Evaluation │
-                 └────────────┬───────────┘
-                              │
-                    ┌─────────┴─────────┐
-                    ▼                   ▼
-             Statistical Tests      SHAP Analysis
-                    │                   │
-                    └─────────┬─────────┘
-                              ▼
-                 ┌────────────────────────┐
-                 │ Consensus Predictive   │
-                 │ Feature Analysis       │
-                 └────────────┬───────────┘
-                              │
-                              ▼
-                 ┌────────────────────────┐
-                 │ Biological             │
-                 │ Interpretation         │
-                 └────────────────────────┘
+Molecular Data
+      ↓
+Quality Control & EDA
+      ↓
+Stratified Train/Test Separation
+      ↓
+Leakage-Safe Preprocessing
+      ↓
+Feature Selection
+      ↓
+┌─────────────────────────────┐
+│ Logistic Regression         │
+│ Random Forest               │
+│ XGBoost                     │
+└──────────────┬──────────────┘
+               ↓
+     5-Fold Stratified CV
+               ↓
+ Performance + Statistical Tests
+               ↓
+       SHAP Interpretation
+               ↓
+ Consensus Feature Ranking
+               ↓
+   Biological Interpretation
 ```
 
 ---
 
-# 5. 🧪 Experimental Design
+## 🤖 Models
 
-The study evaluates three machine learning approaches under a common experimental framework.
+| Model                   | Role                                                         |
+| ----------------------- | ------------------------------------------------------------ |
+| **Logistic Regression** | Regularized linear baseline                                  |
+| **Random Forest**       | Nonlinear ensemble model                                     |
+| **XGBoost**             | Gradient-boosted tree model and primary explainability model |
 
-The analysis includes:
-
-### Data preparation
-
-* Dataset verification
-* Target identification
-* Numerical feature extraction
-* Missing-value handling
-* Stratified train-test separation
-
-### Model development
-
-Each model is evaluated using a consistent preprocessing and modeling framework.
-
-### Feature-selection experiments
-
-The study compares:
-
-| Feature configuration | Description                           |
-| --------------------- | ------------------------------------- |
-| **All Features**      | Full available feature representation |
-| **Top 100**           | 100 highest-ranked selected features  |
-| **Top 500**           | 500 highest-ranked selected features  |
-
-Feature selection is performed using the training data for the corresponding experiment to reduce information leakage.
+The models are evaluated under a common preprocessing and validation framework.
 
 ---
 
-# 6. 🤖 Machine Learning Models
+## 🧩 Feature Selection
 
-## Logistic Regression
+To study the effect of dimensionality reduction, the experiments compare:
 
-Logistic Regression provides a regularized linear baseline for binary classification and offers a relatively interpretable model for high-dimensional molecular data.
+| Configuration    | Description                                                |
+| ---------------- | ---------------------------------------------------------- |
+| **All Features** | Full feature representation                                |
+| **Top 100**      | Reduced representation using the top 100 selected features |
+| **Top 500**      | Reduced representation using the top 500 selected features |
 
-## Random Forest
-
-Random Forest is an ensemble of decision trees capable of modeling nonlinear relationships and feature interactions.
-
-The implementation incorporates class weighting to account for class-distribution considerations.
-
-## XGBoost
-
-XGBoost is a gradient-boosted decision-tree framework capable of capturing nonlinear relationships and complex feature interactions.
-
-It is additionally used as the primary model for detailed SHAP-based interpretation.
+Feature selection is performed using the training data within the corresponding experiment to reduce information leakage.
 
 ---
 
-# 7. 🧩 Feature-Selection Strategy
+## 📊 Evaluation & Statistical Reliability
 
-Feature selection is particularly important in high-dimensional molecular datasets because thousands of candidate variables can increase computational complexity and the risk of overfitting.
+Model performance is evaluated using:
 
-The research compares:
+**Accuracy · Precision · Recall · F1-score · ROC AUC**
 
-```text
-All Features
-      │
-      ├──────────────► Full feature representation
-      │
-      ├──────────────► Top 100 features
-      │
-      └──────────────► Top 500 features
-```
+The study uses:
 
-The feature-selection experiments investigate whether reducing the dimensionality of the molecular representation improves or maintains predictive performance while potentially producing a more interpretable feature space.
+**5-fold Stratified Cross-Validation**
 
-The selected features are subsequently examined through multiple importance and interpretability approaches.
+and incorporates **Wilcoxon signed-rank tests** for pairwise comparison of cross-validation performance, together with confidence-interval estimation.
+
+This allows the analysis to consider not only **which model scores higher**, but also **how stable and statistically defensible those differences are**.
 
 ---
 
-# 8. 🔁 Cross-Validation
+## 🧠 Explainable AI
 
-Model performance is assessed using **Stratified K-Fold Cross-Validation**.
+Predictive performance alone does not reveal why a model makes its decisions.
 
-The current analysis uses:
-
-```text
-5-fold Stratified Cross-Validation
-```
-
-Stratification preserves the relative class distribution across folds.
-
-The evaluation includes:
-
-* Accuracy
-* Weighted Precision
-* Weighted Recall
-* Weighted F1-score
-* ROC AUC
-
-Cross-validation provides an estimate of model stability beyond a single train-test split.
-
----
-
-# 9. 📊 Statistical Testing
-
-Model comparison is not based solely on differences in average performance.
-
-The research additionally investigates whether observed differences between models are statistically meaningful.
-
-Pairwise comparisons of cross-validation performance are performed using the **Wilcoxon signed-rank test**.
-
-Confidence intervals are also estimated for model performance to provide an indication of uncertainty around the observed cross-validation results.
-
-This statistical layer is intended to distinguish potentially meaningful performance differences from differences that may arise from variation across validation folds.
-
----
-
-# 10. 🧠 SHAP-Based Interpretation
-
-Predictive performance alone does not explain *why* a model makes a particular prediction.
-
-To address this, the research incorporates **SHAP (SHapley Additive exPlanations)** for the XGBoost model.
-
-The SHAP analysis investigates:
+For XGBoost, the study therefore applies **SHAP (SHapley Additive exPlanations)** to investigate:
 
 * Global feature importance
-* Relative contribution of individual features
-* Direction of feature contribution
-* Distribution of feature effects
+* Feature contribution direction
+* Individual feature effects
 * Top predictive features
 
-The repository includes generated SHAP outputs under:
+Feature importance is additionally examined through **permutation importance** and XGBoost-derived importance.
 
-```text
-results/shap/
-```
+These complementary perspectives are integrated into a **consensus feature-ranking analysis**.
 
-and corresponding visualizations under:
-
-```text
-results/figures/
-```
-
-The interpretability workflow is designed to move from:
-
-```text
-Prediction
-   ↓
-Feature Contribution
-   ↓
-Feature Ranking
-   ↓
-Consensus Features
-   ↓
-Potential Biological Interpretation
-```
+> Computationally important features should not be interpreted as clinically validated biomarkers without independent biological and clinical validation.
 
 ---
 
-# 11. 🧬 Consensus Predictive-Feature Analysis
+# 📈 Research Outputs
 
-A single feature-importance method may produce model-specific rankings.
+Selected outputs are available in [`results/`](results/):
 
-To reduce dependence on a single interpretation technique, the study combines multiple feature-importance perspectives, including:
+### Feature Selection
 
-* XGBoost feature importance
-* Permutation importance
-* SHAP importance
+* [`consensus_biomarkers.csv`](results/feature_selection/consensus_biomarkers.csv)
+* [`all_feature_importance.csv`](results/feature_selection/all_feature_importance.csv)
+* [`feature_selection_experiments.csv`](results/feature_selection/feature_selection_experiments.csv)
 
-These rankings are integrated into a **consensus feature-ranking framework**.
+### SHAP Analysis
 
-The resulting outputs are available in:
-
-```text
-results/feature_selection/consensus_biomarkers.csv
-```
-
-This provides a more robust starting point for investigating features that repeatedly appear as important across different analytical perspectives.
-
-> The term "biomarker" is used in the context of computational feature analysis and does not imply clinical validation.
+* [`shap_feature_importance.csv`](results/shap/shap_feature_importance.csv)
+* [`xgboost_shap_directional_analysis.csv`](results/shap/xgboost_shap_directional_analysis.csv)
+* [`xgboost_top20_shap_features.csv`](results/shap/xgboost_top20_shap_features.csv)
 
 ---
 
-# 12. 📈 Key Results
+# 🖼️ Key Research Figures
 
-The repository contains the generated experimental outputs required to inspect the study results.
-
-The current analysis provides comparative results across:
-
-* Logistic Regression
-* Random Forest
-* XGBoost
-
-and across:
-
-* All Features
-* Top 100 Features
-* Top 500 Features
-
-The repository additionally contains:
-
-* Feature-importance rankings
-* Consensus feature rankings
-* SHAP feature-importance results
-* SHAP directional analysis
-* Top-feature tables
-* High-resolution interpretation figures
-
-### Result files
-
-```text
-results/
-├── feature_selection/
-│   ├── all_feature_importance.csv
-│   ├── consensus_biomarkers.csv
-│   ├── feature_selection_experiments.csv
-│   └── top20_feature_importance.csv
-│
-├── shap/
-│   ├── shap_feature_importance.csv
-│   ├── xgboost_shap_directional_analysis.csv
-│   ├── xgboost_shap_feature_importance.csv
-│   └── xgboost_top20_shap_features.csv
-│
-└── figures/
-    ├── consensus_biomarkers.png
-    ├── shap_bar_plot.png
-    ├── shap_beeswarm_plot.png
-    ├── shap_summary_plot.png
-    └── top20_feature_importance.png
-```
-
-> **Important:** Exact headline performance values should be taken from the final validated experimental tables rather than inferred from individual notebook outputs.
-
----
-
-# 13. 🖼️ Research Figures
-
-## Consensus Predictive Features
+### Consensus Feature Analysis
 
 ![Consensus Biomarkers](results/figures/consensus_biomarkers.png)
 
-The consensus analysis integrates multiple feature-importance perspectives to identify consistently informative molecular features.
-
----
-
-## SHAP Feature Importance
+### SHAP Feature Importance
 
 ![SHAP Feature Importance](results/figures/shap_bar_plot.png)
 
-Global SHAP importance provides a ranked view of features contributing to XGBoost predictions.
-
----
-
-## SHAP Beeswarm Analysis
+### SHAP Beeswarm
 
 ![SHAP Beeswarm](results/figures/shap_beeswarm_plot.png)
 
-The SHAP beeswarm visualization provides information about both feature importance and the direction/magnitude of individual feature contributions.
-
----
-
-## SHAP Summary
-
-![SHAP Summary](results/figures/shap_summary_plot.png)
-
-The SHAP summary visualization provides a global view of model behavior across the evaluated observations.
-
----
-
-## Top Feature Importance
+### Top Feature Importance
 
 ![Top Feature Importance](results/figures/top20_feature_importance.png)
 
-The top-feature analysis highlights the highest-ranked predictive features identified during the feature-importance analysis.
-
 ---
 
-# 14. 📁 Repository Structure
+# 📁 Repository Structure
 
 ```text
 IDC-ILC-Gene-Expression-Classification/
@@ -463,179 +234,86 @@ IDC-ILC-Gene-Expression-Classification/
 │
 ├── results/
 │   ├── feature_selection/
-│   │   ├── all_feature_importance.csv
-│   │   ├── consensus_biomarkers.csv
-│   │   ├── feature_selection_experiments.csv
-│   │   └── top20_feature_importance.csv
-│   │
 │   ├── shap/
-│   │   ├── shap_feature_importance.csv
-│   │   ├── xgboost_shap_directional_analysis.csv
-│   │   ├── xgboost_shap_feature_importance.csv
-│   │   └── xgboost_top20_shap_features.csv
-│   │
 │   ├── figures/
-│   │   ├── consensus_biomarkers.png
-│   │   ├── shap_bar_plot.png
-│   │   ├── shap_beeswarm_plot.png
-│   │   ├── shap_summary_plot.png
-│   │   └── top20_feature_importance.png
-│   │
 │   └── README.md
 │
 ├── .gitignore
 ├── LICENSE
-├── requirements.txt
-└── README.md
+└── requirements.txt
 ```
 
 ---
 
-# 15. ♻️ Reproducibility
+# ♻️ Reproducibility
 
-The repository is structured to separate:
-
-* Analysis notebooks
-* Dataset documentation
-* Generated research outputs
-* Visualization artifacts
-* Environment dependencies
-
-### Install dependencies
+Install the required dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Main analysis workflow
-
-Start with:
+Run the notebooks in sequence:
 
 ```text
-notebooks/01_IDC_ILC_Exploratory_Analysis.ipynb
+01_IDC_ILC_Exploratory_Analysis.ipynb
+                    ↓
+02_IDC_ILC_Publication_Grade_Analysis.ipynb
 ```
 
-followed by:
-
-```text
-notebooks/02_IDC_ILC_Publication_Grade_Analysis.ipynb
-```
-
-The notebooks document the computational workflow, model development, feature-selection experiments, evaluation, statistical analysis, and interpretability procedures.
+The notebooks document the data-processing, modeling, evaluation, statistical, and interpretability workflow.
 
 ---
 
-# 16. 🔐 Data Availability
+# ⚠️ Limitations
 
-The underlying research datasets are **not included in this public repository**.
+The current study has several important limitations:
 
-This decision is intentional and helps avoid inappropriate redistribution of datasets that may have their own licensing, attribution, privacy, or data-use requirements.
-
-Researchers interested in reproducing the study should obtain the relevant dataset through its authorized source and comply with all applicable terms.
-
-See:
-
-[`data/README.md`](data/README.md)
-
-for additional information.
+* High-dimensional feature space relative to sample size
+* No independent external-cohort validation
+* Computational feature importance does not establish biological causality
+* Results require validation on additional datasets before broader generalization
+* The models are research prototypes, not clinical diagnostic systems
 
 ---
 
-# 17. ⚠️ Limitations
+# 🔭 Future Research
 
-Several limitations should be considered when interpreting the findings.
+Future work may investigate:
 
-### High-dimensional feature space
+**External validation · Multi-cohort analysis · Nested validation · Multi-omics integration · Pathway-level analysis · Feature-selection stability · Explainability stability · Independent biological validation**
 
-The molecular feature space is substantially larger than the number of observations, increasing the risk of overfitting and making robust validation essential.
-
-### Dataset size
-
-The available sample size limits the extent to which the results can be generalized to independent populations.
-
-### External validation
-
-The current repository does not establish performance on an independent external cohort.
-
-### Biological validation
-
-Computationally important features should not automatically be interpreted as clinically validated biomarkers.
-
-### Model dependence
-
-Feature importance can depend on the underlying model and interpretation methodology. Consensus analysis helps address this issue but does not eliminate it.
-
-### Clinical applicability
-
-The models have not been validated as clinical diagnostic tools and should not be interpreted as such.
+The broader goal is to combine **AI, molecular data, and interpretable machine learning** to support deeper computational investigation of breast cancer biology.
 
 ---
 
-# 18. 🔭 Future Work
-
-Potential extensions of the research include:
-
-* Independent external validation
-* Larger multi-cohort datasets
-* Nested cross-validation
-* More rigorous feature-selection stability analysis
-* Additional machine learning and deep learning approaches
-* Multi-omics integration
-* Gene-set and pathway-level analysis
-* Independent biological validation of candidate features
-* Explainability stability analysis
-* Calibration and uncertainty analysis
-* Prospective clinical evaluation
-* Collaboration with domain experts in oncology and molecular biology
-
-The long-term objective is to move from computational classification toward a more robust understanding of the molecular differences between IDC and ILC.
-
----
-
-# 19. 📚 Citation
-
-If you use this repository, methodology, or derived computational outputs in academic work, please cite the repository.
-
-### BibTeX
+# 📚 Citation
 
 ```bibtex
 @software{mirani_idc_ilc_classification,
-  author  = {Vrund Mirani},
-  title   = {IDC vs ILC Classification Using Gene Expression Data},
-  year    = {2026},
+  author    = {Vrund Mirani},
+  title     = {IDC vs ILC Classification Using Gene Expression Data},
+  year      = {2026},
   publisher = {GitHub},
-  url     = {https://github.com/VrundMirani/IDC-ILC-Gene-Expression-Classification}
+  url       = {https://github.com/VrundMirani/IDC-ILC-Gene-Expression-Classification}
 }
 ```
 
-A formal publication citation will be added when the associated research manuscript is finalized and published.
+A formal publication citation will be added when the associated manuscript is finalized and published.
 
 ---
 
-# 20. 👨‍🔬 Author
+# 👨‍🔬 About the Researcher
 
 ## Vrund Mirani
 
-**BTech Computer Science and Engineering (Data Science)**
+**AI Healthcare Researcher · BTech CSE (Data Science)**
 
-Research interests include:
+Working at the intersection of:
 
-* Machine Learning
-* Artificial Intelligence
-* Data Science
-* Computational Biology
-* Biomedical Data Analysis
-* Explainable AI
+**Artificial Intelligence · Machine Learning · Computational Biology · Healthcare Data · Explainable AI**
 
-This repository represents an ongoing effort to apply machine learning and interpretable computational methods to biomedical research questions.
-
----
-
-## 📜 License
-
-This project is released under the **MIT License**.
-
-See [`LICENSE`](LICENSE) for details.
+This research explores how interpretable machine-learning methods can be applied to molecular and biomedical datasets to investigate clinically relevant research questions.
 
 ---
 
@@ -643,14 +321,14 @@ See [`LICENSE`](LICENSE) for details.
 
 This repository is intended for **research and educational purposes**.
 
-The machine learning models, feature rankings, SHAP analyses, and computational findings presented here are **not clinical diagnostic systems** and should not be used to make medical diagnoses, treatment decisions, or other clinical decisions.
-
-Computationally identified features should be independently validated before any biological or clinical interpretation.
+The models, feature rankings, SHAP analyses, and findings presented here are **not clinical diagnostic systems** and should not be used for medical diagnosis or treatment decisions.
 
 ---
 
 <p align="center">
 
-**🧬 Machine Learning × Computational Biology × Explainable AI**
+### 🧬 AI × Healthcare × Computational Biology
+
+**Building interpretable AI systems for biomedical research.**
 
 </p>
